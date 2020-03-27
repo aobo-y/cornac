@@ -59,11 +59,11 @@ class NeuMF(NCFBase):
         Specify an optimizer: adagrad, adam, rmsprop, sgd
 
     early_stopping: {min_delta: float, patience: int}, optional, default: None
-        If `None`, no early stopping. Meaning of the arguments: 
-        
+        If `None`, no early stopping. Meaning of the arguments:
+
         - `min_delta`: the minimum increase in monitored value on validation set to be considered as improvement, \
            i.e. an increment of less than min_delta will count as no improvement.
-        
+
         - `patience`: number of epochs with no improvement after which training should be stopped.
 
     name: string, optional, default: 'NeuMF'
@@ -199,7 +199,7 @@ class NeuMF(NCFBase):
                 name="logits",
                 kernel_initializer=tf.initializers.lecun_uniform(self.seed),
             )
-            self.prediction = tf.nn.sigmoid(logits)
+            self.prediction = logits # tf.nn.sigmoid(logits)
 
             self.loss = loss_fn(labels=self.labels, logits=logits)
             self.train_op = train_fn(
@@ -288,7 +288,7 @@ class NeuMF(NCFBase):
                     self.item_id: np.arange(self.train_set.num_items),
                 },
             )
-            return known_item_scores.ravel()
+            return known_item_scores.ravel()[0]
         else:
             if self.train_set.is_unk_user(user_idx) or self.train_set.is_unk_item(
                 item_idx
@@ -306,4 +306,4 @@ class NeuMF(NCFBase):
                     self.item_id: [item_idx],
                 },
             )
-            return user_pred.ravel()
+            return user_pred.ravel()[0]

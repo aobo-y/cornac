@@ -28,13 +28,20 @@ act_functions = {
 }
 
 
-def loss_fn(labels, logits):
+def loss_fn_classification(labels, logits):
     cross_entropy = tf.reduce_mean(
         tf.nn.sigmoid_cross_entropy_with_logits(labels=labels, logits=logits)
     )
     reg_loss = tf.losses.get_regularization_loss()
     return cross_entropy + reg_loss
 
+def loss_fn(labels, logits):
+    ''' rating regression loss '''
+    mse = tf.reduce_mean(
+        tf.squared_difference(logits, labels)
+    )
+    reg_loss = tf.losses.get_regularization_loss()
+    return mse + reg_loss
 
 def train_fn(loss, learning_rate, learner):
     if learner.lower() == "adagrad":

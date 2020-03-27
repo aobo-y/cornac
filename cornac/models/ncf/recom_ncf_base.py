@@ -43,8 +43,8 @@ class NCFBase(Recommender):
         Specify an optimizer: adagrad, adam, rmsprop, sgd
 
     early_stopping: {min_delta: float, patience: int}, optional, default: None
-        If `None`, no early stopping. Meaning of the arguments: 
-        
+        If `None`, no early stopping. Meaning of the arguments:
+
          - `min_delta`: the minimum increase in monitored value on validation set to be considered as improvement, \
            i.e. an increment of less than min_delta will count as no improvement.
          - `patience`: number of epochs with no improvement after which training should be stopped.
@@ -166,7 +166,7 @@ class NCFBase(Recommender):
             sum_loss = 0
             for i, (batch_users, batch_items, batch_ratings) in enumerate(
                 self.train_set.uir_iter(
-                    self.batch_size, shuffle=True, binary=True, num_zeros=self.num_neg
+                    self.batch_size, shuffle=True, binary=False, num_zeros=self.num_neg
                 )
             ):
                 _loss = self._step_update(batch_users, batch_items, batch_ratings)
@@ -210,9 +210,9 @@ class NCFBase(Recommender):
             provided, the latest model will be loaded.
 
         trainable: boolean, optional, default: False
-            Set it to True if you would like to finetune the model. By default, 
+            Set it to True if you would like to finetune the model. By default,
             the model parameters are assumed to be fixed after being loaded.
-        
+
         Returns
         -------
         self : object
